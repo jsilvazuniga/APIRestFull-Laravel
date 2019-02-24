@@ -1,0 +1,350 @@
+repositorio de proyecto de la clase
+https://github.com/EscuelaIt/API-RESTful-Laravel-5.5/blob/master/routes/web.php
+***************************************************
+
+php --version
+
+composer --version
+/********************/
+
+htdpcs/> composer create-project laravel/laravel MyRestFull
+
+//activa servidor
+MyRestFull/> php artisan serve
+
+//crear un archivo sqllite
+MyRestFull/> php artisan migrate 
+
+/*** listar routes ***/
+MyRestFull/> php artisan route:list
+
+/* crear modelo **/
+MyRestFull/> php artisan make:model --help
+
+php artisan make:model Product --all
+
+productcontroller
+borrar los mmetodos CREATE y edit porque no se usan en API 
+ 
+/** modelo transaction ***************/
+php artisan make:model Transaction --all
+
+-siempre eliminar los metodos CREATE Y EDIT del controller creado
+-crear la ruta en el archivo API
+
+/* CREANDO CONTROLLER USER por que el resto de objetos laravel lo tiene creado*/
+php artisan make:controller UserController -m User
+
+/* creqndo tqblq de referenciq o pivote */
+php artisan make:migration create_category_product_table
+
+/* actualizar las base de datos */
+php artisan migrate /*actualiza la structura de las tablas y mantiene los datos*/
+php artisan migrate:fresh /*eliminar y crea otra vez la base de datos 
+y vuelve a crear la estructura como zero , nunca usarlo en production solo se debe usar para desarrollo*/
+
+los metodos UP quiere decir que table debe de crearse
+y DOWN que table debe eliminase , se usa con el comando migration
+
+
+**********************************************
+Creación de modelos heredando de otro modelo
+**********************************************
+creando des controlador de recursos pour chaque model
+ segun el modelo de datos no hay Buyer and Seller no tienen factory y migrations 
+ vamos a cambiar el extends model por el de User 
+ creando atributo sobre User par aque Buyer and Seller ayant le heritage  
+   protected $table = 'users';
+ 
+php artisan make:mode --help
+
+php artisan make:mode Buyer -cr
+
+php artisan make:mode Seller -cr
+
+***********************************************
+Propiedades para la configuración de modelos
+*************************************************
+propiedades columnas laravel https://laravel.com/docs/5.7/migrations
+
+
+*************************************************
+Implementación de factories para los recursos
+Invocar las factory desde DatabaseSeeder
+*************************************************
+los factoris solo se usan para desarrollo*/
+https://github.com/fzaninotto/Faker
+
+comando para lanzar las factoris
+
+php artisan db:seed
+
+option 2: php artisan migrate:fresh --seed 
+
+*************************************************
+Consejos para el versionado de las API
+*************************************************
+https://www.escuela.it/cursos/curso-de-desarrollo-de-api-restful-con-laravel/clase/laravel-tinker
+
+
+php artisan tinker
+
+App\User::all();
+
+App\User::first();
+
+App\User::all()->random();
+
+App\Product::all()->random();
+
+exit
+
+****************************************************
+Generalizando el Código y Mejorando el Funcionamiento de la API
+*****************************************************
+--permite ver todas las rutas
+php artisan route:list
+
+https://laravel.com/docs/5.7/validation
+
+ejemplo de filtro avanzado
+
+$users = User::where('name', '%like%', request->name)->get();
+
+****************************************************
+-- cambiar lenguaje de laravel messages
+https://github.com/caouecs/Laravel-lang
+config/app.php
+****************************************************
+
+https://www.escuela.it/cursos/curso-de-desarrollo-de-api-restful-con-laravel/clase/comenzando-operaciones-complejas-de-la-api-restful
+
+creando recursos padres
+**********************
+php artisan make:controller Category/CategoryTransactionController -m Transaction -p Category
+
+php artisan make:controller Category/CategoryBuyerController -m Buyer -p Category
+
+php artisan make:controller Category/CategoryProductController -m Product -p Category
+
+php artisan make:controller Category/CategorySellerController -m Seller -p Category
+
+https://www.escuela.it/cursos/curso-de-desarrollo-de-api-restful-con-laravel/clase/como-eliminar-los-datos-pertenecientes-a-una-tabla-pivote
+
+php artisan make:controller Seller/SellerTransactionController -m Transaction -p Seller
+
+php artisan make:controller Seller/SellerCategoryController -m Category -p Seller
+
+php artisan make:controller Seller/SellerBuyerController -m Buyer -p Seller
+
+php artisan make:controller Seller/SellerProductController -m Product -p Seller
+https://www.escuela.it/cursos/curso-de-desarrollo-de-api-restful-con-laravel/clase/almacenar-nuevos-productos-asociados-a-un-vendedor
+
+php artisan make:controller Product/ProductTransactionController -m Transaction -p Product
+
+php artisan make:controller Product/ProductBuyerController -m Buyer -p Product
+
+php artisan make:controller Product/ProductCategoryController -m Category -p Product
+
+/************ creando la transaction principal de ventas **/
+-- controlador de recursos
+
+php artisan make:controller Product/ProductBuyerTransactionController -r 
+
+-----------------------
+laravel eloquent api resources  DTO
+==============================
+cambiar nombres de los cambpos sin afectar la base de datos
+https://www.escuela.it/cursos/curso-de-desarrollo-de-api-restful-con-laravel/clase/agregando-nuevas-caracteristicas-a-la-api-y-transformando-las-respuestas-para-aumentar-la-compatibilidad
+
+https://laravel.com/docs/5.6/eloquent-resources
+
+php artisan make:resource UserResource
+
+php artisan make:resource BuyerResource
+
+php artisan make:resource SellerResource
+
+php artisan make:resource ProductResource
+
+php artisan make:resource TransactionResource
+
+php artisan make:resource CategoryResource
+
+==========================================
+Implementando HATEOAS en la API
+=========================================
+
+
+https://www.escuela.it/cursos/curso-de-desarrollo-de-api-restful-con-laravel/clase/implementando-hateoas-en-la-api
+
+==========================================
+autentication
+==========================================
+php artisan make:auth
+
+php artisan route:list
+
+composer require laravel/passport
+
+php artisan migrate
+
+php artisan passport:install
+
+/*
+C:\xampp\htdocs\MyAPIRestFull>php artisan passport:install
+Encryption keys generated successfully.
+Personal access client created successfully.
+Client ID: 1
+Client secret: tbLu8nccEn57rTPD1WXpsptaKbWzIl9dBk0GxOOL
+Password grant client created successfully.
+Client ID: 2
+Client secret: cE2Sns8MXTLTBIfwH0xfwZYDrKbj5UwPNarSLN8Q
+
+el cliente uno crea tokens
+*/
+
+buscando un usuario con tinker comandos
+
+php artisan tinker
+
+App\User::inRandomOrder()->first();
+
+respuesta:
+email: bradtke.davion@example.org
+passport: secret
+*****************
+- instalando componente para poder agregar clientes
+
+php artisan vendor:publish --tag=passport-components
+
+
+*****************
+--> tener instalado node js y colocar los comandos
+
+- instalando dependencias vue.js comando
+
+npm install
+
+- agregar los siguientes componentes al archivo resources/js/app.js
+
+Vue.component('passport-clients', require('./components/passport/Clients.vue'));
+
+Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue'));
+
+Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue'));
+
+- ejecutar el comando run para compilar 
+
+npm run dev
+
+- agregando un cliente adicional de typo personal
+
+php artisan passport:client --personal
+
+php artisan passport:client
+
+php artisan passport:client --password
+
+ojo los cliente tipo password se pueden crear unicamente en consola
+que es los contrarios al tipo de client CODE que si te permite
+
+- test
+php artisan tinker
+App\User::where('email', 'prueba@prueba.com')->first();
+-copiar el id
+php artisan passport:client
+
+C:\xampp\htdocs\MyAPIRestFull>php artisan tinker
+Psy Shell v0.9.9 (PHP 7.1.8 — cli) by Justin Hileman
+>>> App\User::inRandomOrder()->first();
+=> App\User {#3010
+     id: "208",
+     name: "Ashly Marvin",
+     email: "powlowski.nelda@example.org",
+     created_at: "2019-01-09 22:05:18",
+     updated_at: "2019-01-09 22:05:18",
+   }
+>>>
+
+-- para crear usuarios
+php artisan passport:client --password
+
+
+-- instalando cors -> Access control allow origin -> permite que sea tu api sea usado en la web tambien usando ajax por ejemplo
+https://github.com/barryvdh/laravel-cors
+
+composer require barryvdh/laravel-cors
+
+
+*******************
+actualizar version npm
+
+****************
+METODO COMPLETO DE OAUTH
+========================
+1. Cliente redirige al usuario a la API indicando sus credenciales (cliente_ID y cliente_secret)
+
+2. Usuario decide si autoriza o no al cliente (acceso)
+	2.1 El usuario debe tener sesion iniciada
+	2.2 El usuario debe ser un usuario valido de la API (existir en base de datos)
+
+3. La API retorna una redireccin hacia el cliente
+	3.1 Indicando el codigo (code) de autorizacion
+	
+4. El Cliente debe obtener ese codigo
+	4.1 Decodifica el codigo y lo usa
+
+5. Usar el code para enviar una peticion nueva a la API solicitando un access tokens
+	5.1 POST oauth/token
+	
+---- creando un proyecto laravel cliente para que consuma los servicios API con OAUTH
+composer create-project laravel/laravel ClientHttp
+
+-levantar servicios
+php artisan serve --port=8001 
+
+php artisan make:controller AutorizationController
+	
+composer require guzzlehttp/guzzle	
+
+
+*****************
+
+C:\xampp\htdocs\MyAPIRestFull>php artisan tinker
+Psy Shell v0.9.9 (PHP 7.1.8 — cli) by Justin Hileman
+>>> App\User::inRandomOrder()->first();
+=> App\User {#3010
+     id: "996",
+     name: "Anissa Deckow",
+     email: "laurianne16@example.net",
+     created_at: "2019-01-09 22:08:48",
+     updated_at: "2019-01-09 22:08:48",
+   }
+
+   pws secret
+   
+/************/
+C:\xampp\htdocs\MyAPIRestFull>php artisan tinker
+Psy Shell v0.9.9 (PHP 7.1.8 — cli) by Justin Hileman
+>>> App\User::inRandomOrder()->first();
+=> App\User {#3010
+     id: "273",
+     name: "Frida Rempel Jr.",
+     email: "gilda90@example.com",
+     created_at: "2019-01-09 22:05:31",
+     updated_at: "2019-01-09 22:05:31",
+   }
+/************/
+
+scope
+policies y gates
+
+
+silvazuniga/tebarePageWebPublic Private
+
+
+pedrozuniga@tebare.com
+99999999
+
+
